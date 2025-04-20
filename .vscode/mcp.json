@@ -1,0 +1,13 @@
+{
+    "servers": {
+        "my-mcp-server-ec3ebf5e": {
+            "type": "stdio",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--project",
+                "D:\\code\\gitmain\\Mcp.CDO.Server\\Mcp.Dev.Server\\Mcp.Dev.Server.csproj"
+            ]
+        }
+    }
+}
