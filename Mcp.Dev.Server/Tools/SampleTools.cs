@@ -40,5 +40,38 @@ public static class SampleTools
     {
         return "Subtasks for :" + JiraId + " are: Subtask1, Subtask2, Subtask3";
     }
+
+
+    [McpServerTool, Description("Get requirements from JIRA ID and return gherkin format tests")]
+    public static string GetGherkinSpecsForJira(string JiraId)
+    {
+        //var jiraClient = new JiraService();
+        var jiraClient = new MockJiraService();
+        var issueDetails = Task.Run(async () => await jiraClient.GetIssueDetailsAsync(JiraId)).Result;
+        
+        if (issueDetails == null)
+        {
+            return "JIRA ID not found";
+        }       
+        string content = System.Text.Json.JsonSerializer.Serialize(issueDetails);        
+        
+        ChatMessage[] messages =
+        [
+            new(ChatRole.User, "Briefly summarize the following downloaded content:"),
+            //new(ChatRole.User, "Display content:"),
+            new(ChatRole.User, content),
+            new(ChatRole.User, "Please generate Gherkin format tests for the above requirements"),
+            new(ChatRole.User, content),
+        ];
+        
+        ChatOptions options = new()
+        {      
+            Temperature = 0.3f
+        };
+
+        
+        return "Response with Gherkin :" +  JiraId + " content is :" + content;
+    }
+
     
 }
